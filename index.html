@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+        <!-- Kütüphaneler -->
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+</head>
+<style>
+    /* Root Variables */
+:root {
+    --primary: #00f2fe;
+    --primary-rgb: 0, 242, 254;
+    --secondary: #4facfe;
+    --secondary-rgb: 79, 172, 254;
+    --accent: #FF6B6B;
+    --accent-rgb: 255, 107, 107;
+    --background: #0a0b14;
+    --surface: #151725;
+    --text: #ffffff;
+    --text-secondary: #8a8f98;
+    --card-bg: rgba(21, 23, 37, 0.8);
+    --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --gradient: linear-gradient(45deg, var(--primary), var(--secondary));
+}
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body {
+    background: var(--background);
+    color: var(--text);
+    overflow-x: hidden;
+    cursor: none; /* Custom cursor için */
+}
+/* Custom Cursor */
+.cursor {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: all 0.1s ease;
+    transform: translate(-50%, -50%);
+}
+.cursor-follower {
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: all 0.2s ease;
+    transform: translate(-50%, -50%);
+}
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--gradient);
+    border-radius: 5px;
+}
+/* Loader */
+.loader {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: var(--background);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+}
+.loader-content {
+    text-align: center;
+    position: relative;
+}
+.loader-logo {
+    width: 150px;
+    height: 150px;
+    position: relative;
+    margin-bottom: 20px;
+}
+.loader-cube {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotate 2s infinite linear;
+}
+.loader-cube div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient);
+    opacity: 0.8;
+    border: 2px solid var(--surface);
+}
+.loader-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-top: 1rem;
+}
+.loader-progress {
+    width: 200px;
+    height: 3px;
+    background: var(--surface);
+    margin: 20px auto 0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+.loader-progress-bar {
+    width: 0;
+    height: 100%;
+    background: var(--gradient);
+    animation: progress 2s ease-in-out forwards;
+}
+@keyframes rotate {
+    0% { transform: rotateX(0) rotateY(0); }
+    100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+@keyframes progress {
+    0% { width: 0; }
+    100% { width: 100%; }
+}
+/* Text Selection */
+::selection {
+    background: var(--primary);
+    color: var(--background);
+}
+/* Animations */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+/* Hover Effects */
+.hover-glow {
+    transition: all 0.3s ease;
+}
+.hover-glow:hover {
+    box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.5);
+}
+.hover-scale {
+    transition: all 0.3s ease;
+}
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+/* Glass Morphism */
+.glass {
+    background: rgba(var(--surface-rgb), 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+/* Navbar Styles */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 1.5rem 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    background: rgba(10, 11, 20, 0.8);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+.navbar.scrolled {
+    padding: 1rem 10%;
+    background: rgba(10, 11, 20, 0.95);
+}
+.nav-logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.nav-logo i {
+    font-size: 2rem;
+    color: var(--primary);
+}
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+.nav-link {
+    color: var(--text);
+    text-decoration: none;
+    position: relative;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+.nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gradient);
+    transition: width 0.3s ease;
+}
+.nav-link:hover::before {
+    width: 100%;
+}
+.nav-auth {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+.btn-login {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--primary);
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+.btn-login::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient);
+    opacity: 0.2;
+    transition: all 0.3s ease;
+}
+.btn-login:hover::before {
+    left: 0;
+}
+.btn-login:hover {
+    transform: translateY(-2px);
+}
+.btn-register {
+    background: var(--gradient);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
+.btn-register::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(45deg);
+    left: -100px;
+    transition: all 0.3s ease;
+}
+.btn-register:hover::after {
+    left: 200%;
+}
+.btn-register:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(var(--primary-rgb), 0.3);
+}
+/* Mobile Menu */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1001;
+}
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 300px;
+    height: 100vh;
+    background: var(--surface);
+    padding: 2rem;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+.mobile-menu.active {
+    right: 0;
+}
+.mobile-menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 3rem;
+}
+.mobile-menu-link {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 1.2rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+.mobile-menu-link:hover {
+    background: rgba(var(--primary-rgb), 0.1);
+    transform: translateX(10px);
+}
+@media (max-width: 768px) {
+    .nav-links, .nav-auth {
+        display: none;
+    }
+    .mobile-menu-btn {
+        display: block;
+    }
+    .navbar {
+        padding: 1rem 5%;
+    }
+}
+/* Menu Overlay */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+.menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+/* Hero Section Styles */
+.hero {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    padding: 8rem 10% 5rem;
+    background: linear-gradient(135deg, 
+        rgba(var(--primary-rgb), 0.1) 0%,
+        rgba(var(--secondary-rgb), 0.1) 100%);
+    display: flex;
+    align-items: center;
+}
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top right,
+        rgba(var(--primary-rgb), 0.1),
+        transparent 50%);
+    pointer-events: none;
+}
+.hero-content {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    width: 100%;
+}
+.hero-text {
+    max-width: 600px;
+}
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    background: rgba(var(--primary-rgb), 0.1);
+    border-radius: 50px;
+    color: var(--primary);
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(var(--primary-rgb), 0.2);
+    animation: fadeInUp 1s ease;
+}
+.hero-badge i {
+    font-size: 1.2rem;
+}
+.hero-title {
+    font-size: 4rem;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 1s ease 0.2s forwards;
+    opacity: 0;
+}
+.gradient-text {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.hero-description {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    animation: fadeInUp 1s ease 0.4s forwards;
+    opacity: 0;
+    line-height: 1.8;
+}
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    animation: fadeInUp 1s ease 0.6s forwards;
+    opacity: 0;
+}
+.hero-btn {
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.hero-btn-primary {
+    background: var(--gradient);
+    color: white;
+    border: none;
+}
+.hero-btn-primary::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(45deg);
+    left: -100px;
+    transition: all 0.3s ease;
+}
+.hero-btn-primary:hover::after {
+    left: 200%;
+}
+.hero-btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 2px solid var(--primary);
+}
+.hero-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(var(--primary-rgb), 0.3);
+}
+.hero-visual {
+    position: relative;
+    animation: fadeInRight 1s ease 1s forwards;
+    opacity: 0;
+}
+.hero-image {
+    width: 100%;
+    height: auto;
+    animation: float 6s ease-in-out infinite;
+}
+.hero-glow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center,
+        rgba(var(--primary-rgb), 0.2) 0%,
+        transparent 70%);
+    filter: blur(20px);
+    z-index: -1;
+}
+.floating-items img {
+    position: absolute;
+    animation: float 4s ease-in-out infinite;
+}
+.item1 { top: 20%; left: 10%; animation-delay: 0s; }
+.item2 { top: 50%; right: 10%; animation-delay: 1s; }
+.item3 { bottom: 20%; left: 20%; animation-delay: 2s; }
+/* Features Section Styles */
+.features {
+    padding: 8rem 10%;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+}
+.section-header {
+    text-align: left;
+    margin-bottom: 4rem;
+}
+.section-title {
+    font-size: 3rem;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+.section-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    line-height: 1.6;
+    max-width: 600px;
+}
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+.feature-box {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+.feature-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+.feature-box:hover::before {
+    opacity: 0.1;
+}
+.feature-box:hover {
+    transform: translateY(-10px);
+}
+.feature-icon {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+.feature-content {
+    position: relative;
+    z-index: 2;
+}
+.feature-content h3 {
+    font-size: 1.5rem;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+.feature-content p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .hero-text {
+        max-width: 100%;
+    }
+    .hero-buttons {
+        justify-content: center;
+    }
+    .hero-visual {
+        display: none;
+    }
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 768px) {
+    .hero {
+        padding: 6rem 5% 3rem;
+    }
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+    .section-title {
+        font-size: 2rem;
+    }
+}
+/* Products Section Styles */
+.products {
+    padding: 8rem 10%;
+    background: var(--background);
+    position: relative;
+}
+.product-filters {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+.filter-btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 50px;
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+.filter-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient);
+    transition: all 0.3s ease;
+    z-index: 1;
+    opacity: 0;
+}
+.filter-btn span {
+    position: relative;
+    z-index: 2;
+}
+.filter-btn.active::before,
+.filter-btn:hover::before {
+    left: 0;
+    opacity: 1;
+}
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+.product-card {
+    background: var(--surface);
+    border-radius: 1rem;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow);
+}
+.product-card:hover {
+    transform: translateY(-10px);
+}
+.product-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+.product-card:hover .product-image img {
+    transform: scale(1.1);
+}
+.product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.product-card:hover .product-overlay {
+    opacity: 1;
+}
+.preview-btn {
+    padding: 0.8rem 1.5rem;
+    background: white;
+    color: var(--background);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    transform: translateY(20px);
+    opacity: 0;
+}
+.product-card:hover .preview-btn {
+    transform: translateY(0);
+    opacity: 1;
+}
+.product-content {
+    padding: 2rem;
+}
+.product-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--gradient);
+    color: white;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+}
+.product-title {
+    font-size: 1.5rem;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+.product-description {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+.product-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+}
+.product-features span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+}
+.product-features i {
+    color: var(--primary);
+}
+.product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+}
+.product-price {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.price-now {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.price-old {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+}
+.buy-btn {
+    padding: 0.8rem 1.5rem;
+    background: var(--gradient);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.buy-btn::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(45deg);
+    left: -100px;
+    transition: all 0.3s ease;
+}
+.buy-btn:hover::after {
+    left: 200%;
+}
+.buy-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(var(--primary-rgb), 0.3);
+}
+/* Testimonials Section Styles */
+.testimonials {
+    padding: 8rem 10%;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+}
+.testimonials-container {
+    position: relative;
+    overflow: hidden;
+}
+.testimonials-track {
+    display: flex;
+    gap: 1rem;
+    animation: scrollTestimonials 30s linear infinite;
+    width: max-content;
+}
+.testimonial-card {
+    flex: 0 0 300px;
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    background: rgba(var(--primary-rgb), 0.1);
+}
+.testimonial-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.testimonial-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.testimonial-info h4 {
+    color: var(--text);
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+}
+.testimonial-info span {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+.testimonial-text {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+@keyframes scrollTestimonials {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-300px * 5)); }
+}
+.testimonials-track:hover {
+    animation-play-state: paused;
+}
+/* References Section Styles */
+.references {
+    padding: 8rem 10%;
+    background: var(--background);
+    position: relative;
+}
+.references-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+}
+.reference-card {
+    background: var(--surface);
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+}
+.reference-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.reference-card:hover::before {
+    opacity: 0.1;
+}
+.reference-card:hover {
+    transform: translateY(-10px);
+}
+.reference-header {
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+}
+.reference-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary);
+}
+.reference-info h3 {
+    font-size: 1.3rem;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+}
+.reference-info span {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+.reference-content {
+    padding: 0 2rem 2rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    position: relative;
+}
+/* Footer Styles */
+.footer {
+    background: var(--surface);
+    padding: 5rem 10% 2rem;
+    position: relative;
+    overflow: hidden;
+}
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top right,
+        rgba(var(--primary-rgb), 0.1),
+        transparent 70%);
+    pointer-events: none;
+}
+.footer-content {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 4rem;
+    margin-bottom: 3rem;
+}
+.footer-logo h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.footer-description {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+}
+.footer-social {
+    display: flex;
+    gap: 1rem;
+}
+.social-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.social-link:hover {
+    background: var(--gradient);
+    transform: translateY(-3px);
+}
+.footer-links h4 {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    color: var(--text);
+}
+.footer-links a {
+    display: block;
+    color: var(--text-secondary);
+    text-decoration: none;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+.footer-links a:hover {
+    color: var(--primary);
+    transform: translateX(5px);
+}
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    position: relative;
+    z-index: 2;
+}
+.footer-credits {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+/* Additional Animations */
+.scroll-animation {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+}
+.scroll-animation.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+.fade-in {
+    animation: fadeIn 0.8s ease forwards;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.slide-in-left {
+    animation: slideInLeft 0.8s ease forwards;
+}
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+.slide-in-right {
+    animation: slideInRight 0.8s ease forwards;
+}
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+/* Responsive Design for all sections */
+@media (max-width: 1200px) {
+    .references-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 768px) {
+    .references-grid {
+        grid-template-columns: 1fr;
+    }
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .footer-social {
+        justify-content: center;
+    }
+    .section-header {
+        text-align: center;
+    }
+    .section-subtitle {
+        margin: 0 auto;
+    }
+}
+/* Custom Scrollbar for Webkit browsers */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--gradient);
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+.hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-bottom: 2rem;
+}
+.stat {
+    text-align: center;
+}
+.stat-number-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.stat-plus {
+    font-size: 2rem;
+    font-weight: 700;
+    background: var(--gradient);
+    -webkit-background-clip: text;background-clip: text;
+    color: transparent;
+    margin-left: 2px;
+}
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    white-space: nowrap;
+}
+@media (max-width: 768px) {
+    .hero-stats {
+        flex-direction: column;
+        gap: 2rem;
+        align-items: center;
+    }
+}
+#particles-js {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: transparent;
+}
+.hero {
+    position: relative;
+    overflow: hidden;
+}
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+@media (max-width: 768px) {
+    body {
+        cursor: auto; /* Mobil cihazlarda normal imleci kullan */
+    }
+    .cursor, .cursor-follower {
+        display: none;
+    }
+}
+</style>
+<body>
+    <!-- Özel Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-logo">
+            <i class="fas fa-cube"></i>
+            LB Development
+        </div>
+        <div class="nav-links">
+            <a href="#home" class="nav-link">Ana Sayfa</a>
+            <a href="#features" class="nav-link">Özellikler</a>
+            <a href="#products" class="nav-link">Ürünler</a>
+            <a href="#testimonials" class="nav-link">Yorumlar</a>
+            <a href="#references" class="nav-link">Referanslar</a>
+        </div>
+        <div class="nav-auth">
+            <button class="btn-login">
+                <i class="fas fa-user"></i>
+                Giriş Yap
+            </button>
+            <button class="btn-register">
+                <i class="fas fa-sign-in-alt"></i>
+                Kayıt Ol
+            </button>
+        </div>
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <div class="mobile-menu-header">
+            <div class="nav-logo">
+                <i class="fas fa-cube"></i>
+                LB Development
+            </div>
+            <button class="mobile-menu-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="#home" class="mobile-menu-link">Ana Sayfa</a>
+            <a href="#features" class="mobile-menu-link">Özellikler</a>
+            <a href="#products" class="mobile-menu-link">Ürünler</a>
+            <a href="#testimonials" class="mobile-menu-link">Yorumlar</a>
+            <a href="#references" class="mobile-menu-link">Referanslar</a>
+        </div>
+        <div class="mobile-menu-auth">
+            <button class="btn-login">
+                <i class="fas fa-user"></i>
+                Giriş Yap
+            </button>
+            <button class="btn-register">
+                <i class="fas fa-sign-in-alt"></i>
+                Kayıt Ol
+            </button>
+        </div>
+    </div>
+
+    <!-- Menu Overlay -->
+    <div class="menu-overlay"></div>
+    
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-particles" id="particles-js"></div>
+        <div class="hero-content">
+            <div class="hero-text" data-aos="fade-right">
+                <div class="hero-badge">
+                    <i class="fas fa-rocket"></i>
+                    Premium Minecraft Çözümleri
+                </div>
+                <h1 class="hero-title">
+                    Minecraft Sunucunuzu
+                    <span class="gradient-text" id="typed"></span>
+                </h1>
+                <p class="hero-description">
+                    Premium kodlar, özel eklentiler ve profesyonel çözümlerle
+                    sunucunuzu bir üst seviyeye taşıyın.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number-wrapper">
+                            <span class="stat-number" data-count="500">500</span>
+                            <span class="stat-plus">+</span>
+                        </div>
+                        <span class="stat-label">Mutlu Müşteri</span>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number-wrapper">
+                            <span class="stat-number" data-count="50">50</span>
+                            <span class="stat-plus">+</span>
+                        </div>
+                        <span class="stat-label">Özel Eklenti</span>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number-wrapper">
+                            <span class="stat-number">24/7</span>
+                        </div>
+                        <span class="stat-label">Destek</span>
+                    </div>
+                </div>
+                <div class="hero-buttons">
+                    <button class="hero-btn hero-btn-primary">
+                        <i class="fas fa-shopping-cart"></i>
+                        Hemen Başla
+                        <div class="btn-glow"></div>
+                    </button>
+                    <button class="hero-btn hero-btn-secondary">
+                        <i class="fas fa-play"></i>
+                        Nasıl Çalışır?
+                    </button>
+                </div>
+            </div>
+            <div class="hero-visual" data-aos="fade-left">
+                <img src="ws.png" alt="Minecraft Character" class="hero-image">
+                <div class="hero-glow"></div>
+                <div class="floating-items">
+                    <img src="" alt="" class="float-item item1">
+                    <img src="item2.png" alt="" class="float-item item2">
+                    <img src="item3.png" alt="" class="float-item item3">
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-header" data-aos="fade-up">
+            <h2 class="section-title">Neden Bizi Seçmelisiniz?</h2>
+            <p class="section-subtitle">Tutkulu geliştiriciler ve tasarımcılardan oluşan ekibimizle harika ürünler üretiyoruz.</p>
+        </div>
+        <div class="features-grid">
+            <!-- Feature Card 1 -->
+            <div class="feature-box" data-aos="fade-up">
+                <div class="feature-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Uygun Fiyatlandırma</h3>
+                    <p>Artık yüksek fiyatlar yok. Fiyatlarımız makul ve erişilebilir.</p>
+                </div>
+            </div>
+            <!-- Feature Card 2 -->
+            <div class="feature-box" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Uzman Ekip</h3>
+                    <p>Yazılım geliştirme ve tasarımın her alanında uzmanız.</p>
+                </div>
+            </div>
+            <!-- Feature Card 3 -->
+            <div class="feature-box" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-icon">
+                    <i class="fas fa-sync"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Güncel Teknolojiler</h3>
+                    <p>En son teknolojiler ve frameworkler ile güncel kalın.</p>
+                </div>
+            </div>
+            <!-- Feature Card 4 -->
+            <div class="feature-box" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>7/24 Destek</h3>
+                    <p>Profesyonel ekibimiz ile kesintisiz teknik destek hizmeti.</p>
+                </div>
+            </div>
+            <!-- Feature Card 5 -->
+            <div class="feature-box" data-aos="fade-up" data-aos-delay="400">
+                <div class="feature-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Sizi Dinliyoruz</h3>
+                    <p>Müşterilerimizi dinliyor ve ürünlerimizi geliştiriyoruz.</p>
+                </div>
+            </div>
+            <!-- Feature Card 6 -->
+            <div class="feature-box" data-aos="fade-up" data-aos-delay="500">
+                <div class="feature-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Sevdiğiniz Araçlar</h3>
+                    <p>Ürünlerimizle kendinizi evinizde hissedeceksiniz.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="section-header" data-aos="fade-up">
+            <h2 class="section-title">Ürünlerimiz</h2>
+            <p class="section-subtitle">Sunucunuz için özel olarak tasarlanmış çözümler</p>
+        </div>
+        <div class="product-filters" data-aos="fade-up">
+            <button class="filter-btn active" data-filter="all"><span>Tümü</span></button>
+            <button class="filter-btn" data-filter="plugin"><span>Eklentiler</span></button>
+            <button class="filter-btn" data-filter="theme"><span>Temalar</span></button>
+            <button class="filter-btn" data-filter="system"><span>Sistemler</span></button>
+        </div>
+        <div class="products-grid">
+            <!-- Product Card 1 -->
+            <div class="product-card" data-category="plugin" data-aos="fade-up">
+                <div class="product-image">
+                    <img src="RenkliBanner.png" alt="Premium Ekonomi Sistemi">
+                    <div class="product-overlay">
+                        <button class="preview-btn">Önizleme</button>
+                    </div>
+                </div>
+                <div class="product-content">
+                    <span class="product-badge">Yeni</span>
+                    <h3 class="product-title">Ekonomi Sistemi</h3>
+                    <p class="product-description">
+                        Gelişmiş ekonomi yönetimi ve market sistemi ile sunucunuzu yönetin.
+                    </p>
+                    <div class="product-features">
+                        <span><i class="fas fa-check"></i> Tam Optimizasyon</span>
+                        <span><i class="fas fa-check"></i> Kolay Kurulum</span>
+                        <span><i class="fas fa-check"></i> 7/24 Destek</span>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="price-now">₺299</span>
+                            <span class="price-old">₺499</span>
+                        </div>
+                        <button class="buy-btn">Satın Al</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Product Card 2 -->
+            <div class="product-card" data-category="theme" data-aos="fade-up" data-aos-delay="100">
+                <div class="product-image">
+                    <img src="Morbanner.png" alt="Modern Sunucu Teması">
+                    <div class="product-overlay">
+                        <button class="preview-btn">Önizleme</button>
+                    </div>
+                </div>
+                <div class="product-content">
+                    <span class="product-badge">Popüler</span>
+                    <h3 class="product-title">Modern Sunucu Teması</h3>
+                    <p class="product-description">
+                        Responsive ve modern tasarıma sahip sunucu teması.
+                    </p>
+                    <div class="product-features">
+                        <span><i class="fas fa-check"></i> Mobil Uyumlu</span>
+                        <span><i class="fas fa-check"></i> SEO Dostu</span>
+                        <span><i class="fas fa-check"></i> Özelleştirilebilir</span>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="price-now">₺199</span>
+                            <span class="price-old">₺299</span>
+                        </div>
+                        <button class="buy-btn">Satın Al</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Product Card 3 -->
+            <div class="product-card" data-category="theme" data-aos="fade-up" data-aos-delay="100">
+                <div class="product-image">
+                    <img src="RenkliBanner.png" alt="Modern Sunucu Teması">
+                    <div class="product-overlay">
+                        <button class="preview-btn">Önizleme</button>
+                    </div>
+                </div>
+                <div class="product-content">
+                    <span class="product-badge">Popüler</span>
+                    <h3 class="product-title">Modern Sunucu Teması</h3>
+                    <p class="product-description">
+                        Responsive ve modern tasarıma sahip sunucu teması.
+                    </p>
+                    <div class="product-features">
+                        <span><i class="fas fa-check"></i> Mobil Uyumlu</span>
+                        <span><i class="fas fa-check"></i> SEO Dostu</span>
+                        <span><i class="fas fa-check"></i> Özelleştirilebilir</span>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="price-now">₺199</span>
+                            <span class="price-old">₺299</span>
+                        </div>
+                        <button class="buy-btn">Satın Al</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="section-header" data-aos="fade-up">
+            <h2 class="section-title">Müşteri Yorumları</h2>
+            <p class="section-subtitle">Değerli müşterilerimizin deneyimleri</p>
+        </div>
+        <div class="testimonials-container">
+            <div class="testimonials-track">
+                <!-- Testimonial Card 1 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="user1.jpg" alt="User" class="testimonial-avatar">
+                        <div class="testimonial-info">
+                            <h4>@EditorFil</h4>
+                        </div>
+                    </div>
+                    <p class="testimonial-text">
+                        "Harika bir deneyim! İhtiyacım olan tüm yazılım ve tasarım çözümlerini LB Development'ta buldum."
+                    </p>
+                </div>
+                <!-- Testimonial Card 2 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="user2.jpg" alt="User" class="testimonial-avatar">
+                        <div class="testimonial-info">
+                            <h4>@TaklaCraft</h4>
+                        </div>
+                    </div>
+                    <p class="testimonial-text">
+                        "Sunucum için aldığım sistemler mükemmel çalışıyor. Destek ekibi her zaman yardımcı oluyor."
+                    </p>
+                </div>
+                <!-- Testimonial Card 3 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="user3.jpg" alt="User" class="testimonial-avatar">
+                        <div class="testimonial-info">
+                            <h4>@RamiCraft</h4>
+                        </div>
+                    </div>
+                    <p class="testimonial-text">
+                        "Ürünlerin kalitesi ve optimizasyonu gerçekten üst düzey. Kesinlikle tavsiye ediyorum!"
+                    </p>
+                </div>
+                <!-- Diğer testimonial kartları -->
+            </div>
+        </div>
+    </section>
+    <!-- References Section -->
+    <section class="references" id="references">
+        <div class="section-header" data-aos="fade-up">
+            <h2 class="section-title">Referanslarımız</h2>
+            <p class="section-subtitle">Kategorisinde en büyüklerle çalışıyoruz</p>
+        </div>
+        <div class="references-grid">
+            <!-- Reference Card 1 -->
+            <div class="reference-card" data-aos="fade-up">
+                <div class="reference-header">
+                    <img src="logo.jpg" alt="TaklaCraft" class="reference-avatar">
+                    <div class="reference-info">
+                        <h3>CraftLime</h3>
+                        <span>Server / YouTuber</span>
+                    </div>
+                </div>
+                <div class="reference-content">
+                    <p>CraftLime'in Minecraft sunucu ağı.</p>
+                </div>
+            </div>
+            <!-- Reference Card 2 -->
+            <div class="reference-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="reference-header">
+                    <img src="cf.png" alt="RamiCraft" class="reference-avatar">
+                    <div class="reference-info">
+                        <h3>CraftRise</h3>
+                        <span>Server / YouTuber</span>
+                    </div>
+                </div>
+                <div class="reference-content">
+                    <p>CraftRise'ın Minecraft sunucu ağı.</p>
+                </div>
+            </div>
+            <!-- Reference Card 3 -->
+            <div class="reference-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="reference-header">
+                    <img src="cf.png" alt="RamiCraft" class="reference-avatar">
+                    <div class="reference-info">
+                        <h3>CraftRise</h3>
+                        <span>Server / YouTuber</span>
+                    </div>
+                </div>
+                <div class="reference-content">
+                    <p>CraftRise'ın Minecraft sunucu ağı.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h3>LB Development</h3>
+                <p class="footer-description">
+                    Premium Minecraft çözümleri ile sunucunuzu bir üst seviyeye taşıyın.
+                </p>
+                <div class="footer-social">
+                    <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Hızlı Linkler</h4>
+                <a href="#home">Ana Sayfa</a>
+                <a href="#features">Özellikler</a>
+                <a href="#products">Ürünler</a>
+                <a href="#testimonials">Yorumlar</a>
+            </div>
+            <div class="footer-links">
+                <h4>Destek</h4>
+                <a href="#faq">SSS</a>
+                <a href="#contact">İletişim</a>
+                <a href="#privacy">Gizlilik Politikası</a>
+                <a href="#terms">Kullanım Şartları</a>
+            </div>
+            <div class="footer-links">
+                <h4>İletişim</h4>
+                <a href="mailto:info@lbdevelopment.com">info@lbdevelopment.com</a>
+                <a href="#discord">Discord</a>
+                <a href="#telegram">Telegram</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 LB Development. Tüm hakları saklıdır.</p>
+            <div class="footer-credits">
+                Developed by LB Development / Developer: CanByes
+            </div>
+        </div>
+    </footer>
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/ScrollTrigger.min.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Özel imleç (cursor) için
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+
+        document.addEventListener('mousemove', function(e) {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            // Cursor follower'ı biraz gecikmeyle takip ettir (daha yumuşak görünüm için)
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX + 'px';
+                cursorFollower.style.top = e.clientY + 'px';
+            }, 50);
+        });
+
+        // Hover effect for clickable elements
+        document.querySelectorAll('a, button').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                cursorFollower.style.transform = 'translate(-50%, -50%) scale(1.5)';
+            });
+            element.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursorFollower.style.transform = 'translate(-50%, -50%) scale(1)';
+            });
+        });
+        
+        // Particles.js yapılandırması
+        particlesJS("particles-js", {
+            particles: {
+                number: {
+                    value: 100,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: "#00f2fe"
+                },
+                shape: {
+                    type: "circle"
+                },
+                opacity: {
+                    value: 0.5,
+                    random: false,
+                    anim: {
+                        enable: false
+                    }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    anim: {
+                        enable: false
+                    }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#00f2fe",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: false,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false,
+                    attract: {
+                        enable: false,
+                        rotateX: 600,
+                        rotateY: 1200
+                    }
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: "repulse"
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: "push"
+                    },
+                    resize: true
+                },
+                modes: {
+                    repulse: {
+                        distance: 100,
+                        duration: 0.4
+                    },
+                    push: {
+                        particles_nb: 4
+                    }
+                }
+            },
+            retina_detect: true
+        });
+        
+        // Typed.js
+        new Typed('#typed', {
+            strings: ['Güçlendirin', 'Özelleştirin', 'Geliştirin'],
+            typeSpeed: 50,
+            backSpeed: 30,
+            loop: true
+        });
+        
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                
+                gsap.to(window, {
+                    duration: 1,
+                    scrollTo: {
+                        y: target,
+                        offsetY: 70
+                    },
+                    ease: "power2.inOut"
+                });
+            });
+        });
+        
+        // Testimonials Auto-scroll
+        function duplicateTestimonials() {
+            const track = document.querySelector('.testimonials-track');
+            const cards = track.innerHTML;
+            track.innerHTML = cards + cards; // Duplicate cards for seamless loop
+        }
+        
+        // Call after DOM is loaded
+        document.addEventListener('DOMContentLoaded', duplicateTestimonials);
+        
+        // Mobile Menu
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const menuOverlay = document.querySelector('.menu-overlay');
+        const mobileMenuClose = document.querySelector('.mobile-menu-close');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+            menuOverlay.classList.add('active');
+        });
+        
+        function closeMenu() {
+            mobileMenu.classList.remove('active');
+            menuOverlay.classList.remove('active');
+        }
+        
+        mobileMenuClose.addEventListener('click', closeMenu);
+        menuOverlay.addEventListener('click', closeMenu);
+        
+        // Stats Counter Animation
+        function animateValue(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                element.textContent = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+        
+        // Animate stats when they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statsNumbers = entry.target.querySelectorAll('.stat-number[data-count]');
+                    statsNumbers.forEach(stat => {
+                        animateValue(stat, 0, parseInt(stat.dataset.count), 2000);
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+        
+        document.querySelectorAll('.hero-stats').forEach(stats => {
+            observer.observe(stats);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+/* style.css */
+:root {
+  --primary-color: #00f2fe;
+  --dark-bg: #0a0b14;
+  --card-bg: #151725;
+  --text-primary: #ffffff;
+  --text-secondary: #8a8f98;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-color: var(--dark-bg);
+  color: var(--text-primary);
+}
+
+/* Navbar Styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 5%;
+  background-color: var(--card-bg);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: var(--primary-color);
+}
+
+/* Hero Section */
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 5%;
+  background: linear-gradient(rgba(10, 11, 20, 0.8), rgba(10, 11, 20, 0.8)),
+              url('hero-bg.jpg') center/cover;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+.cta-button {
+  padding: 1rem 2rem;
+  background: var(--primary-color);
+  border: none;
+  border-radius: 5px;
+  color: var(--dark-bg);
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+}
+
+/* Features Section */
+.features {
+  padding: 5rem 5%;
+}
+
+.feature-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.feature-card {
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: 10px;
+  transition: transform 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Products Section */
+.products {
+  padding: 5rem 5%;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+/* Testimonials */
+.testimonials {
+  padding: 5rem 5%;
+  background-color: var(--card-bg);
+}
+
+.testimonial-slider {
+  margin-top: 3rem;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 2rem;
+  padding: 1rem;
+}
+
+/* Footer */
+.footer {
+  background-color: var(--card-bg);
+  padding: 3rem 5%;
+  margin-top: 5rem;
+}
